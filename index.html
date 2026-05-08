@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Code Axis Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+<style>
+
+body{
+  background:#f9fafb;
+  font-family:Inter,sans-serif;
+}
+
+/* CARD */
+.card-box{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* INPUTS */
+.form-control,
+.form-select{
+  height:45px;
+  border-radius:10px;
+}
+
+/* BADGES */
+.badge-active{
+  background:#22c55e33;
+  color:#22c55e;
+  font-weight:600;
+}
+
+.badge-working{
+  background:#4f46e533;
+  color:#4f46e5;
+  font-weight:600;
+}
+
+.badge-pending{
+  background:#f59e0b33;
+  color:#f59e0b;
+  font-weight:600;
+}
+
+/* ACTION BUTTONS */
+.action-btn{
+  border:none;
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  background:#f3f4f6;
+  transition:0.3s;
+}
+
+.action-btn:hover{
+  background:#4f46e5;
+  color:#fff;
+}
+
+/* PROJECT CARD */
+.project-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  transition:0.3s;
+  height:100%;
+}
+
+.project-card:hover{
+  transform:translateY(-5px);
+}
+
+.progress{
+  height:8px;
+  border-radius:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+<!-- EMPLOYEE TABLE -->
+<div class="card-box mb-5">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<h3 class="fw-bold">Modern Employee Table</h3>
+
+<div class="d-flex gap-2">
+
+<!-- ADD EMPLOYEE BUTTON -->
+<button class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#employeeModal">
+
+  <i class="bi bi-plus-circle"></i>
+  Add Employee
+
+</button>
+
+<!-- EDIT EMPLOYEE BUTTON -->
+<button class="btn btn-warning"
+        onclick="openEditModal()">
+
+  <i class="bi bi-pencil-square"></i>
+  Edit Employee
+
+</button>
+
+</div>
+
+</div>
+
+<!-- FILTERS -->
+<div class="row g-2 mb-4">
+
+<div class="col-md-5">
+  <input type="text"
+         id="search"
+         class="form-control"
+         placeholder="Search employee...">
+</div>
+
+<div class="col-md-3">
+  <select id="department" class="form-select">
+
+    <option value="all">All Department</option>
+    <option value="ui design">UI Design</option>
+    <option value="frontend">Frontend</option>
+    <option value="backend">Backend</option>
+    <option value="developer">Developer</option>
+
+  </select>
+</div>
+
+<div class="col-md-4">
+  <select id="status" class="form-select">
+
+    <option value="all">All Status</option>
+    <option value="active">Active</option>
+    <option value="working">Working</option>
+    <option value="pending">Pending</option>
+
+  </select>
+</div>
+
+</div>
+
+<!-- TABLE -->
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead class="table-light">
+
+<tr>
+  <th>Name</th>
+  <th>Department</th>
+  <th>Status</th>
+  <th>Email</th>
+  <th>Actions</th>
+</tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+<!-- ROW 1 -->
+<tr data-name="sangeetha"
+    data-dept="ui design"
+    data-status="active">
+
+<td>Sangeetha</td>
+
+<td>UI Design</td>
+
+<td>
+  <span class="badge-active px-3 py-1 rounded-pill">
+    Active
+  </span>
+</td>
+
+<td>sangeetha@gmail.com</td>
+
+<td>
+
+<button class="action-btn"
+        onclick="viewRow(this)">
+  <i class="bi bi-eye"></i>
+</button>
+
+<button class="action-btn"
+        onclick="editEmployee(this)">
+  <i class="bi bi-pencil"></i>
+</button>
+
+<button class="action-btn"
+        onclick="deleteRow(this)">
+  <i class="bi bi-trash"></i>
+</button>
+
+</td>
+
+</tr>
+
+<!-- ROW 2 -->
+<tr data-name="praveen"
+    data-dept="frontend"
+    data-status="working">
+
+<td>Praveen</td>
+
+<td>Frontend</td>
+
+<td>
+  <span class="badge-working px-3 py-1 rounded-pill">
+    Working
+  </span>
+</td>
+
+<td>praveen@gmail.com</td>
+
+<td>
+
+<button class="action-btn"
+        onclick="viewRow(this)">
+  <i class="bi bi-eye"></i>
+</button>
+
+<button class="action-btn"
+        onclick="editEmployee(this)">
+  <i class="bi bi-pencil"></i>
+</button>
+
+<button class="action-btn"
+        onclick="deleteRow(this)">
+  <i class="bi bi-trash"></i>
+</button>
+
+</td>
+
+</tr>
+
+<!-- ROW 3 -->
+<tr data-name="raghuram"
+    data-dept="developer"
+    data-status="pending">
+
+<td>Raghuram</td>
+
+<td>Developer</td>
+
+<td>
+  <span class="badge-pending px-3 py-1 rounded-pill">
+    Pending
+  </span>
+</td>
+
+<td>raghu@gmail.com</td>
+
+<td>
+
+<button class="action-btn"
+        onclick="viewRow(this)">
+  <i class="bi bi-eye"></i>
+</button>
+
+<button class="action-btn"
+        onclick="editEmployee(this)">
+  <i class="bi bi-pencil"></i>
+</button>
+
+<button class="action-btn"
+        onclick="deleteRow(this)">
+  <i class="bi bi-trash"></i>
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- PROJECT CARDS -->
+
+<h3 class="fw-bold mb-4">Project Cards</h3>
+
+<div class="row g-4">
+
+<!-- CARD 1 -->
+<div class="col-md-4">
+
+<div class="project-card">
+
+<h5>CRM Dashboard</h5>
+
+<p class="text-muted">
+Customer management system
+</p>
+
+<div class="progress mb-2">
+<div class="progress-bar bg-primary"
+     style="width:80%">
+</div>
+</div>
+
+<small>Progress: 80%</small>
+
+<hr>
+
+<button class="btn btn-primary w-100"
+        onclick="openProject('CRM Dashboard')">
+
+View Project
+
+</button>
+
+</div>
+
+</div>
+
+<!-- CARD 2 -->
+<div class="col-md-4">
+
+<div class="project-card">
+
+<h5>Mobile Banking</h5>
+
+<p class="text-muted">
+Secure banking application
+</p>
+
+<div class="progress mb-2">
+<div class="progress-bar bg-success"
+     style="width:65%">
+</div>
+</div>
+
+<small>Progress: 65%</small>
+
+<hr>
+
+<button class="btn btn-success w-100"
+        onclick="openProject('Mobile Banking')">
+
+View Project
+
+</button>
+
+</div>
+
+</div>
+
+<!-- CARD 3 -->
+<div class="col-md-4">
+
+<div class="project-card">
+
+<h5>Analytics Platform</h5>
+
+<p class="text-muted">
+Data analytics dashboard
+</p>
+
+<div class="progress mb-2">
+<div class="progress-bar bg-warning"
+     style="width:90%">
+</div>
+</div>
+
+<small>Progress: 90%</small>
+
+<hr>
+
+<button class="btn btn-warning w-100"
+        onclick="openProject('Analytics Platform')">
+
+View Project
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ADD EMPLOYEE MODAL -->
+<div class="modal fade" id="employeeModal">
+
+<div class="modal-dialog">
+
+<div class="modal-content border-0 rounded-4">
+
+<div class="modal-header">
+
+<h5 class="modal-title">
+Add Employee
+</h5>
+
+<button class="btn-close"
+        data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<input type="text"
+       id="empName"
+       class="form-control mb-3"
+       placeholder="Employee Name">
+
+<input type="email"
+       id="empEmail"
+       class="form-control mb-3"
+       placeholder="Employee Email">
+
+<select id="empDept"
+        class="form-select mb-3">
+
+<option value="ui design">UI Design</option>
+<option value="frontend">Frontend</option>
+<option value="backend">Backend</option>
+<option value="developer">Developer</option>
+
+</select>
+
+<select id="empStatus"
+        class="form-select">
+
+<option value="active">Active</option>
+<option value="working">Working</option>
+<option value="pending">Pending</option>
+
+</select>
+
+</div>
+
+<div class="modal-footer">
+
+<button class="btn btn-secondary"
+        data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button class="btn btn-primary"
+        onclick="addEmployee()">
+
+Add Employee
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- EDIT EMPLOYEE MODAL -->
+<div class="modal fade" id="editEmployeeModal">
+
+<div class="modal-dialog">
+
+<div class="modal-content border-0 rounded-4">
+
+<div class="modal-header">
+
+<h5 class="modal-title">
+Edit Employee
+</h5>
+
+<button class="btn-close"
+        data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<select id="editSelectEmployee"
+        class="form-select mb-3">
+
+<option value="">
+Select Employee
+</option>
+
+</select>
+
+<input type="text"
+       id="editName"
+       class="form-control mb-3"
+       placeholder="Employee Name">
+
+<input type="email"
+       id="editEmail"
+       class="form-control mb-3"
+       placeholder="Employee Email">
+
+<select id="editDept"
+        class="form-select mb-3">
+
+<option value="ui design">UI Design</option>
+<option value="frontend">Frontend</option>
+<option value="backend">Backend</option>
+<option value="developer">Developer</option>
+
+</select>
+
+<select id="editStatus"
+        class="form-select">
+
+<option value="active">Active</option>
+<option value="working">Working</option>
+<option value="pending">Pending</option>
+
+</select>
+
+</div>
+
+<div class="modal-footer">
+
+<button class="btn btn-secondary"
+        data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button class="btn btn-warning"
+        onclick="updateEmployee()">
+
+Update Employee
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+// FILTER ELEMENTS
+const search = document.getElementById("search");
+const dept = document.getElementById("department");
+const status = document.getElementById("status");
+
+// FILTER TABLE
+function filterTable(){
+
+  const rows =
+    document.querySelectorAll("#tableBody tr");
+
+  let s = search.value.toLowerCase();
+  let d = dept.value;
+  let st = status.value;
+
+  rows.forEach(row => {
+
+    let name = row.dataset.name;
+    let dep = row.dataset.dept;
+    let stat = row.dataset.status;
+
+    let match =
+      name.includes(s) &&
+      (d === "all" || dep === d) &&
+      (st === "all" || stat === st);
+
+    row.style.display = match ? "" : "none";
+
+  });
+
+}
+
+// EVENTS
+search.addEventListener("input", filterTable);
+dept.addEventListener("change", filterTable);
+status.addEventListener("change", filterTable);
+
+// VIEW EMPLOYEE
+function viewRow(btn){
+
+  let row = btn.closest("tr");
+
+  let details = `
+Name : ${row.cells[0].innerText}
+Department : ${row.cells[1].innerText}
+Status : ${row.cells[2].innerText}
+Email : ${row.cells[3].innerText}
+`;
+
+  alert(details);
+
+}
+
+// INLINE EDIT
+function editEmployee(btn){
+
+  let row = btn.closest("tr");
+
+  let currentName = row.cells[0].innerText;
+  let currentDept = row.cells[1].innerText;
+  let currentStatus = row.cells[2].innerText.trim();
+  let currentEmail = row.cells[3].innerText;
+
+  let newName =
+    prompt("Edit Name", currentName);
+
+  let newDept =
+    prompt("Edit Department", currentDept);
+
+  let newStatus =
+    prompt(
+      "Edit Status (active / working / pending)",
+      currentStatus.toLowerCase()
+    );
+
+  let newEmail =
+    prompt("Edit Email", currentEmail);
+
+  if(!newName || !newDept ||
+     !newStatus || !newEmail){
+
+    alert("Update Cancelled");
+    return;
+
+  }
+
+  updateRowData(
+    row,
+    newName,
+    newDept,
+    newStatus,
+    newEmail
+  );
+
+  alert("Employee Updated Successfully");
+
+}
+
+// DELETE
+function deleteRow(btn){
+
+  let row = btn.closest("tr");
+
+  if(confirm("Delete " + row.dataset.name + " ?")){
+
+    row.remove();
+
+    alert("Employee Deleted Successfully");
+
+  }
+
+}
+
+// ADD EMPLOYEE
+function addEmployee(){
+
+  let name =
+    document.getElementById("empName").value.trim();
+
+  let email =
+    document.getElementById("empEmail").value.trim();
+
+  let department =
+    document.getElementById("empDept").value;
+
+  let empStatus =
+    document.getElementById("empStatus").value;
+
+  if(name === "" || email === ""){
+
+    alert("Please fill all fields");
+
+    return;
+
+  }
+
+  let badgeClass = getBadgeClass(empStatus);
+
+  let row = `
+
+<tr data-name="${name.toLowerCase()}"
+    data-dept="${department}"
+    data-status="${empStatus}">
+
+<td>${name}</td>
+
+<td>${department}</td>
+
+<td>
+<span class="${badgeClass} px-3 py-1 rounded-pill">
+${empStatus}
+</span>
+</td>
+
+<td>${email}</td>
+
+<td>
+
+<button class="action-btn"
+        onclick="viewRow(this)">
+<i class="bi bi-eye"></i>
+</button>
+
+<button class="action-btn"
+        onclick="editEmployee(this)">
+<i class="bi bi-pencil"></i>
+</button>
+
+<button class="action-btn"
+        onclick="deleteRow(this)">
+<i class="bi bi-trash"></i>
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+  document.getElementById("tableBody")
+          .innerHTML += row;
+
+  document.getElementById("empName").value = "";
+  document.getElementById("empEmail").value = "";
+
+  let modal = bootstrap.Modal.getInstance(
+    document.getElementById("employeeModal")
+  );
+
+  modal.hide();
+
+  alert("Employee Added Successfully");
+
+}
+
+// GLOBAL VARIABLE
+let selectedRow = null;
+
+// OPEN EDIT MODAL
+function openEditModal(){
+
+  let rows =
+    document.querySelectorAll("#tableBody tr");
+
+  let select =
+    document.getElementById("editSelectEmployee");
+
+  select.innerHTML =
+    `<option value="">Select Employee</option>`;
+
+  rows.forEach((row,index)=>{
+
+    let name = row.cells[0].innerText;
+
+    select.innerHTML += `
+      <option value="${index}">
+        ${name}
+      </option>
+    `;
+
+  });
+
+  let modal = new bootstrap.Modal(
+    document.getElementById("editEmployeeModal")
+  );
+
+  modal.show();
+
+}
+
+// SELECT EMPLOYEE
+document
+.getElementById("editSelectEmployee")
+.addEventListener("change",function(){
+
+  let rows =
+    document.querySelectorAll("#tableBody tr");
+
+  selectedRow = rows[this.value];
+
+  if(selectedRow){
+
+    document.getElementById("editName").value =
+      selectedRow.cells[0].innerText;
+
+    document.getElementById("editEmail").value =
+      selectedRow.cells[3].innerText;
+
+    document.getElementById("editDept").value =
+      selectedRow.dataset.dept;
+
+    document.getElementById("editStatus").value =
+      selectedRow.dataset.status;
+
+  }
+
+});
+
+// UPDATE EMPLOYEE
+function updateEmployee(){
+
+  if(!selectedRow){
+
+    alert("Please Select Employee");
+
+    return;
+
+  }
+
+  let name =
+    document.getElementById("editName").value;
+
+  let email =
+    document.getElementById("editEmail").value;
+
+  let deptValue =
+    document.getElementById("editDept").value;
+
+  let statusValue =
+    document.getElementById("editStatus").value;
+
+  updateRowData(
+    selectedRow,
+    name,
+    deptValue,
+    statusValue,
+    email
+  );
+
+  let modal = bootstrap.Modal.getInstance(
+    document.getElementById("editEmployeeModal")
+  );
+
+  modal.hide();
+
+  alert("Employee Updated Successfully");
+
+}
+
+// COMMON UPDATE FUNCTION
+function updateRowData(
+  row,
+  name,
+  deptValue,
+  statusValue,
+  email
+){
+
+  row.dataset.name = name.toLowerCase();
+  row.dataset.dept = deptValue;
+  row.dataset.status = statusValue;
+
+  row.cells[0].innerText = name;
+  row.cells[1].innerText = deptValue;
+  row.cells[3].innerText = email;
+
+  let badgeClass =
+    getBadgeClass(statusValue);
+
+  row.cells[2].innerHTML = `
+    <span class="${badgeClass} px-3 py-1 rounded-pill">
+      ${statusValue}
+    </span>
+  `;
+
+  filterTable();
+
+}
+
+// BADGE CLASS
+function getBadgeClass(status){
+
+  if(status === "active"){
+    return "badge-active";
+  }
+
+  else if(status === "working"){
+    return "badge-working";
+  }
+
+  else{
+    return "badge-pending";
+  }
+
+}
+
+// PROJECT BUTTON
+function openProject(name){
+
+  alert("Opening Project : " + name);
+
+}
+
+</script>
+
+</body>
+</html>
